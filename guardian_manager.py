@@ -1,4 +1,5 @@
 from idun_guardian_sdk import GuardianBLE, GuardianAPI
+from datetime import datetime, timezone, timedelta
 import time
 
 class GuardianManager:
@@ -24,6 +25,7 @@ class GuardianManager:
             my_recording_id = recording_json["recordingID"]
         filename = input("What should the filename be? ")
         self.api.download_recording(recording_id=my_recording_id, eeg=True, imu=False, sleep_report=False, filename=filename)
+
     def download_sleep_report_data(self, my_recording_id=None):
         if my_recording_id == None:
             recording_json = self.get_recording_json()
@@ -41,23 +43,16 @@ class GuardianManager:
         self.api.download_recording(recording_id=my_recording_id, eeg=False, imu=True, sleep_report=False, filename=filename)
 
     def record_data(self, duration):
+        recording_id = self.api.start_recording(None, filtered_stream=None, raw_stream=False)
+        self.ble.start_recording()
+
         start_time = datetime.now(timezone.utc)
-        while datetime.now(timezone.utc) - start_time < timedelta(seconds=30):
+        while datetime.now(timezone.utc) - start_time < timedelta(seconds=duration):
             try:
                 time.sleep(1)
             except KeyboardInterrupt:
                 break
 
 
-if __name__ == "__main__":
-    guardianManager = GuardianManager()
-    while True:
-        user_input = input("Enter a function name (check_battery, check_impedance, get_recording_json, download_eeg_data, download_imu_data, download_sleep_report_data), or 'exit' to quit: ")
-        
-        if user_input == "exit":
-            break
-        
-        if hasattr(guardianManager, user_input):
-            getattr(guardianManager, user_input)()
-        else:
-            print("Invalid function name. Please try again.")
+        self.ble.stop_recording()
+        self.api.stop_recording()

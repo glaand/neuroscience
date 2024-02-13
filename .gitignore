@@ -1,5 +1,6 @@
 __pycache__/
 speech.mp3
+.env
 
 .vscode/*
 !.vscode/settings.json

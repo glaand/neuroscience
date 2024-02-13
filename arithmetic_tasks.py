@@ -34,7 +34,6 @@ def play_audio(text):
 def task_1_record_resting_state():
     play_audio("Please sit still for 5 minutes while we record your resting state data. 3... 2... 1... Recording")
     
-    
 
 def task_2_record_easy_arithmetic():
     play_audio("Please solve the easy arithmetic tasks. 3... 2... 1... Recording")

@@ -48,7 +48,7 @@ def task_0_start_recording():
 
 def task_1_record_resting_state():
     play_audio("Please stay still in a rested state for 5 minutes. I will notify you once the recording is complete. Ready?. 3... 2... 1... Recording")
-    resting_id = gm.record_data(3)
+    resting_id = gm.record_data(300)
     play_audio("Recording complete")
     print(f"Downloaded data for recording {resting_id}")
     gm.download_eeg_data(resting_id)
